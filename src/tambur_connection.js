@@ -9,7 +9,7 @@
         connections = {};
 
     // Public properties
-    tambur.static_url = "api.tambur.io/static/";
+    tambur.static_url = "tamburio.github.com/tambur.js/";
     tambur.api_host = "api.tambur.io";
     tambur.balancer_host = "balancer.tambur.io";
     tambur.WebSocket = false;
@@ -31,7 +31,7 @@
 
     function trigger_flash_socket_init(connection) {
         window.WEB_SOCKET_SWF_LOCATION = (connection.ssl === true ? "https://" : "http://") + tambur.static_url + "WebSocketMainInsecure.swf";
-        tambur.utils.fetch_js("tambur_flash.min.js", function () {
+        tambur.utils.fetch_js("min/tambur_flash.min.js", function () {
             tambur.logger.debug("trigger_flash_socket_init returned, start with normal socket init");
             tambur.WebSocket = window["WebSocket"];
             trigger_socket_init(connection);
@@ -122,18 +122,28 @@
             connection.api_key = arguments[0];
             connection.app_id = arguments[1];
         }
-        if (!window.TAMBUR_FORCE_FLASH && (window["WebSocket"] !== undefined || window["MozWebSocket"] !== undefined)) {
-            tambur.WebSocket = window["WebSocket"] || window["MozWebSocket"];
-            trigger_socket_init(connection);
-        } else {
-            /*
-             * at this moment we download the web_socket.js
-             * flash fallback for browser who do not support
-             * websockets out of the box. After the successful
-             * download we will call Tambur.__init_ws from there
-             * */
-            trigger_flash_socket_init(connection);
+
+        var init = function() {
+            if (!window.TAMBUR_FORCE_FLASH && (window["WebSocket"] !== undefined || window["MozWebSocket"] !== undefined)) {
+                tambur.WebSocket = window["WebSocket"] || window["MozWebSocket"];
+                trigger_socket_init(connection);
+            } else {
+                /*
+                 * at this moment we download the web_socket.js
+                 * flash fallback for browser who do not support
+                 * websockets out of the box. After the successful
+                 * download we will call Tambur.__init_ws from there
+                 * */
+                trigger_flash_socket_init(connection);
+            }
         }
+
+        if (window["JSON"] !== undefined) {
+            init();
+        } else {
+            tambur.utils.fetch_js("min/json2.min.js", init);
+        }
+
         return connection;
     };
 
@@ -154,5 +164,9 @@
             onclose(connection);
         };
     };
+
+    if (window["JSON"] == undefined) {
+
+    }
 
 }(window.tambur = window.tambur || {}));
