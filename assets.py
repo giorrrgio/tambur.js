@@ -10,21 +10,32 @@ def main():
 
     env = Environment('.', '/static')
     jsonjs = Bundle(
-            'deps/json2.js', filters='yui_js', output='min/json2.min.js')
+            'deps/json2.js', filters='yui_js', output='out/json2.min.js')
     sockjs = Bundle(
             'deps/swfobject.js',
-            'deps/web_socket.js', filters='yui_js', output='min/web_socket.min.js')
+            'deps/web_socket.js', filters='yui_js', output='out/web_socket.min.js')
     tamburjs = Bundle(
             'src/tambur_connection.js',
             'src/tambur_logger.js',
             'src/tambur_utils.js',
-            'src/tambur_stream.js', filters='yui_js', output='min/tambur.min.js')
+            'src/tambur_stream.js', output='out/tambur.js')
+    tamburminjs = Bundle(
+            'src/tambur_connection.js',
+            'src/tambur_logger.js',
+            'src/tambur_utils.js',
+            'src/tambur_stream.js', filters='yui_js', output='out/tambur.min.js')
     publishjs = Bundle(
             'deps/sha1.js',
             'deps/oauth.js',
-            'src/tambur_publisher.js', filters='yui_js', output='min/tambur_pub.min.js')
+            'src/tambur_publisher.js', output='out/tambur_pub.js')
+    publishminjs = Bundle(
+            'deps/sha1.js',
+            'deps/oauth.js',
+            'src/tambur_publisher.js', filters='yui_js', output='out/tambur_pub.min.js')
     env.register('tambur.js', tamburjs)
+    env.register('tambur.min.js', tamburminjs)
     env.register('tambur_pub.js', publishjs)
+    env.register('tambur_pub.min.js', publishminjs)
     env.register('json2.js', jsonjs)
     env.register('web_socket.js', sockjs)
     cmdenv = CommandLineEnvironment(env, log)
