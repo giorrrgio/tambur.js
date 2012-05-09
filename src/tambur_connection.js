@@ -30,8 +30,8 @@
     }
 
     function trigger_flash_socket_init(connection) {
-        window.WEB_SOCKET_SWF_LOCATION = (connection.ssl === true ? "https://" : "http://") + tambur.static_url + "WebSocketMainInsecure.swf";
-        tambur.utils.fetch_js("min/tambur_flash.min.js", function () {
+        window.WEB_SOCKET_SWF_LOCATION = (connection.ssl === true ? "https://" : "http://") + tambur.static_url + "deps/WebSocketMainInsecure.swf";
+        tambur.utils.fetch_js("out/web_socket.min.js", function () {
             tambur.logger.debug("trigger_flash_socket_init returned, start with normal socket init");
             tambur.WebSocket = window["WebSocket"];
             trigger_socket_init(connection);
@@ -141,7 +141,7 @@
         if (window["JSON"] !== undefined) {
             init();
         } else {
-            tambur.utils.fetch_js("min/json2.min.js", init);
+            tambur.utils.fetch_js("out/json2.min.js", init);
         }
 
         return connection;
