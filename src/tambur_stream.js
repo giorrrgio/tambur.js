@@ -9,7 +9,10 @@
                 cmd = ["subscribe", handle, stream.name];
                 //cmd = "subscribe:" + handle + ":" + stream.name;
             stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") { stream.active = true; }
+                if (response === "ok") {
+                    stream.active = true;
+                    stream.ready();
+                }
             };
             tambur.logger.debug(cmd);
             stream.connection.socket.send(JSON.stringify(cmd));
