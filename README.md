@@ -141,13 +141,19 @@ stream.direct_msg("bob", "hi bob, how are you doing?");
 
 This call will always work, even if no user "bob" has subscribed. It probably make sense to use direct mode together with the presence mode.
 
+##3. Publisher
+Since you don't want to use the tambur.js Publisher interface in production we don't bundle it together with the tambur.min.js or tambur.js. That's why you must add another script element to your website.
+```html
+<script src="http://tamburio.github.com/tambur.js/out/tambur_pub.min.js"></script>
+```
 
-###Publish
 Using this Publish interface is only recommended for debugging and/or testing.
 ```javascript
 var conn = new tambur.Connection(MY_API_KEY, MY_APP_ID);
 var publisher = new tambur.Publisher(conn, MY_APP_SECRET);
 ```
+
+###Publish
     
 ```javascript    
 publisher.publish("SOME_STREAM", "SOME MESSAGE");
