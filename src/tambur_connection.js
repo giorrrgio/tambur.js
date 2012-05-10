@@ -164,9 +164,4 @@
             onclose(connection);
         };
     };
-
-    if (window["JSON"] == undefined) {
-
-    }
-
 }(window.tambur = window.tambur || {}));

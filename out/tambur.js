@@ -164,11 +164,6 @@
             onclose(connection);
         };
     };
-
-    if (window["JSON"] == undefined) {
-
-    }
-
 }(window.tambur = window.tambur || {}));
 
 (function (tambur, undefined) {
@@ -233,82 +228,129 @@
 
     // Private methods
     function subscribe(stream) {
-        if (!stream.active) {
-            var handle = stream.connection.nr_of_calls += 1,
-                cmd = ["subscribe", handle, stream.name];
-                //cmd = "subscribe:" + handle + ":" + stream.name;
-            stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") { stream.active = true; }
+        if (stream.active) {
+            throw {
+                name : "Stream Error",
+                message : "Stream is already active"
             };
-            tambur.logger.debug(cmd);
-            stream.connection.socket.send(JSON.stringify(cmd));
         }
+
+        var handle = stream.connection.nr_of_calls += 1,
+            cmd = ["subscribe", handle, stream.name];
+            //cmd = "subscribe:" + handle + ":" + stream.name;
+        stream.connection.response_handler[handle] = function (response) {
+            if (response === "ok") {
+                stream.active = true;
+                stream.ready();
+            }
+        };
+        tambur.logger.debug(cmd);
+        stream.connection.socket.send(JSON.stringify(cmd));
     }
 
     function unsubscribe(stream) {
-        if (stream.active) {
-            var handle = stream.connection.nr_of_calls += 1,
-                cmd = ["unsubscribe", handle, stream.name];
-                //cmd = "unsubscribe:" + handle + ":" + stream.name;
-            stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") { stream.active = false; }
+        if (!stream.active) {
+            throw {
+                name : "Stream Error",
+                message : "Stream is inactive"
             };
-            tambur.logger.debug(cmd);
-            stream.connection.socket.send(JSON.stringify(cmd));
         }
+
+        var handle = stream.connection.nr_of_calls += 1,
+            cmd = ["unsubscribe", handle, stream.name];
+            //cmd = "unsubscribe:" + handle + ":" + stream.name;
+        stream.connection.response_handler[handle] = function (response) {
+            if (response === "ok") { stream.active = false; }
+        };
+        tambur.logger.debug(cmd);
+        stream.connection.socket.send(JSON.stringify(cmd));
     }
 
     function enable_mode(stream, mode, token, params) {
-        if (stream.active && !stream.enabled_modes[mode]) {
-            var handle = stream.connection.nr_of_calls += 1,
-                cmd = ["set_mode", handle, mode, stream.name];
-            stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") {
-                    stream.enabled_modes[mode] = true;
-                    stream.onenabled(mode);
-                }
+        if (!stream.active) {
+            throw {
+                name : "Stream Error",
+                message : "You cannot enable a mode for an inactive stream"
             };
-            if (typeof params !== "undefined") {
-                cmd.push(params);
-            }
-            cmd.push(token);
-            tambur.logger.debug(cmd);
-            stream.connection.socket.send(JSON.stringify(cmd));
         }
+
+        if (stream.enabled_modes[mode]) {
+            throw {
+                name : "Mode Error",
+                message : "Mode is already enabled"
+            };
+        }
+        var handle = stream.connection.nr_of_calls += 1,
+            cmd = ["set_mode", handle, mode, stream.name];
+        stream.connection.response_handler[handle] = function (response) {
+            if (response === "ok") {
+                stream.enabled_modes[mode] = true;
+                stream.onenabled(mode);
+            }
+        };
+        if (typeof params !== "undefined") {
+            cmd.push(params);
+        }
+        cmd.push(token);
+        tambur.logger.debug(cmd);
+        stream.connection.socket.send(JSON.stringify(cmd));
     }
 
     function disable_mode(stream, mode, params) {
-        if (stream.active && stream.enabled_modes[mode]) {
-            var handle = stream.connection.nr_of_calls += 1,
-                cmd = ["unset_mode", handle, mode, stream.name];
-            if (mode === "direct") {
-                cmd.push(params);
-            }
-            stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") {
-                    stream.enabled_modes[mode] = false;
-                    stream.ondisabled(mode);
-                }
+        if (!stream.active) {
+            throw {
+                name : "Stream Error",
+                message : "You cannot disable a mode for an inactive stream"
             };
-            tambur.logger.debug(cmd);
-            stream.connection.socket.send(JSON.stringify(cmd));
         }
+
+        if (typeof stream.enabled_modes[mode] === "undefined") {
+            throw {
+                name : "Mode Error",
+                message : "Mode is not enabled"
+            };
+        }
+        var handle = stream.connection.nr_of_calls += 1,
+            cmd = ["unset_mode", handle, mode, stream.name];
+        if (mode === "direct") {
+            cmd.push(params);
+        }
+        stream.connection.response_handler[handle] = function (response) {
+            if (response === "ok") {
+                stream.enabled_modes[mode] = false;
+                stream.ondisabled(mode);
+            }
+        };
+        tambur.logger.debug(cmd);
+        stream.connection.socket.send(JSON.stringify(cmd));
     }
 
     function direct_msg(stream, receiver_user_id, msg) {
-        if (stream.active && stream.enabled_modes["direct"]) {
-            var handle = stream.connection.nr_of_calls =+ 1,
-                cmd = ["direct", handle, stream.name, receiver_user_id, msg];
-            stream.connection.response_handler[handle] = function (response) {
-                if (response === "ok") {
-                    tambur.logger.debug("message dispatched to: "+receiver_user_id);
-                } else {
-                    tambur.logger.debug("not able to dispatch message: "+msg +"for reason: "+response);
-                }
+        if (!stream.active) {
+            throw {
+                name : "Stream Error",
+                message : "You cannot send a direct message through an inactive stream"
             };
-            tambur.logger.debug(cmd);
-            stream.connection.socket.send(JSON.stringify(cmd));
         }
+
+        if (typeof stream.enabled_modes["direct"] === "undefined") {
+            throw {
+                name : "Mode Error",
+                message : "Direct Mode is not enabled"
+            };
+        }
+
+        var handle = stream.connection.nr_of_calls =+ 1,
+            cmd = ["direct", handle, stream.name, receiver_user_id, msg];
+        stream.connection.response_handler[handle] = function (response) {
+            if (response === "ok") {
+                tambur.logger.debug("message dispatched to: "+receiver_user_id);
+            } else {
+                tambur.logger.debug("not able to dispatch message: "+msg +"for reason: "+response);
+            }
+        };
+        tambur.logger.debug(cmd);
+        stream.connection.socket.send(JSON.stringify(cmd));
     }
 
     tambur.Stream = function (connection, name) {
