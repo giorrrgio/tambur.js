@@ -4,7 +4,7 @@ Include the following script element on your website.
 ```html
 <script src="http://tamburio.github.com/tambur.js/out/tambur.min.js"></script>
 ```
-##1. Connection
+##Connection
 At first you must to get a new connection to our servers:
 ```javascript
 var conn = new tambur.Connection(MY_API_KEY, MY_APP_ID);
@@ -24,7 +24,7 @@ Behind the scene we will now check your browser for its HTML5 WebSocket support.
 
 Once your connection is ready you can start subscribing to any stream you like.
 
-##2. Streams
+##Streams
 Subscribing to a stream is as easy as
 
 ```javascript
@@ -141,7 +141,7 @@ stream.direct_msg("bob", "hi bob, how are you doing?");
 
 This call will always work, even if no user "bob" has subscribed. It probably make sense to use direct mode together with the presence mode.
 
-##3. Publisher
+##Publisher
 Since you don't want to use the tambur.js Publisher interface in production we don't bundle it together with the tambur.min.js or tambur.js. That's why you must add another script element to your website.
 ```html
 <script src="http://tamburio.github.com/tambur.js/out/tambur_pub.min.js"></script>
