@@ -757,47 +757,8 @@ try {
     "use strict";
     /*global window*/
     /*global document*/
-    /*global XMLHttpRequest*/
-    /*global ActiveXObject*/
     /*global OAuth*/
 
-    function ajax_post(action, data, onsuccess, onerror) {
-        var xmlHttp = null;
-        onsuccess = onsuccess || function () {};
-        onerror = onerror || function () {};
-        try {
-            // Mozilla, Opera, Safari sowie Internet Explorer (ab v7)
-            xmlHttp = new XMLHttpRequest();
-        } catch (e1) {
-            try {
-                // MS Internet Explorer (ab v6)
-                xmlHttp  = new ActiveXObject("Microsoft.XMLHTTP");
-            } catch (e2) {
-                try {
-                    // MS Internet Explorer (ab v5)
-                    xmlHttp  = new ActiveXObject("Msxml2.XMLHTTP");
-                } catch (e3) {
-                    xmlHttp  = null;
-                }
-            }
-        }
-        if (xmlHttp) {
-            xmlHttp.open('POST', action, true);
-            xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlHttp.onreadystatechange = function () {
-                if (xmlHttp.readyState === 4) {
-                    if (xmlHttp.status === 204) {
-                        onsuccess();
-                    } else {
-                        onerror();
-                    }
-                } else {
-                    onerror();
-                }
-            };
-            xmlHttp.send(data);
-        }
-    }
 
     function publish(publisher, stream, message, do_debug) {
         var oauth_params = {},
@@ -830,7 +791,7 @@ try {
             action = action + "?debug=true";
         }
 
-        ajax_post(action, data);
+        tambur.utils.ajax_post(action, data);
     }
 
     function generate_mode_token(publisher, mode, property) {

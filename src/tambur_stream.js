@@ -116,7 +116,7 @@
             };
         }
 
-        var handle = stream.connection.nr_of_calls =+ 1,
+        var handle = stream.connection.nr_of_calls += 1,
             cmd = ["direct", handle, stream.name, receiver_user_id, msg];
         stream.connection.response_handler[handle] = function (response) {
             if (response === "ok") {
@@ -178,7 +178,7 @@
             dispatch : function (msg) {
                 var mode = msg[0];
                 var data = msg[1];
-                tambur.logger.debug("stream[" + this.name + "] dispatch msg:" + msg);
+                tambur.logger.debug("stream[" + this.name + "] dispatch for mode: " + mode + " data: " + data);
                 if (mode === "auth") {
                     this.onauth(data);
                 } else if (mode === "presence") {

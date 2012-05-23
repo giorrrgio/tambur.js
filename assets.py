@@ -12,14 +12,17 @@ def main():
     jsonjs = Bundle(
             'deps/json2.js', filters='yui_js', output='out/json2.min.js')
     sockjs = Bundle(
-            'deps/swfobject.js',
             'deps/web_socket.js', filters='yui_js', output='out/web_socket.min.js')
     tamburjs = Bundle(
+            'deps/swfobject.js',
+            'src/tambur_comet_fallback.js',
             'src/tambur_connection.js',
             'src/tambur_logger.js',
             'src/tambur_utils.js',
             'src/tambur_stream.js', output='out/tambur.js')
     tamburminjs = Bundle(
+            'deps/swfobject.js',
+            'src/tambur_comet_fallback.js',
             'src/tambur_connection.js',
             'src/tambur_logger.js',
             'src/tambur_utils.js',

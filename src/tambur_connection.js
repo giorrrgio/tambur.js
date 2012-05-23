@@ -30,6 +30,7 @@
     }
 
     function trigger_flash_socket_init(connection) {
+        window.WebSocket = undefined;
         window.WEB_SOCKET_SWF_LOCATION = (connection.ssl === true ? "https://" : "http://") + tambur.static_url + "deps/WebSocketMainInsecure.swf";
         tambur.utils.fetch_js("out/web_socket.min.js", function () {
             tambur.logger.debug("trigger_flash_socket_init returned, start with normal socket init");
@@ -124,19 +125,33 @@
         }
 
         var init = function() {
-            if (!window.TAMBUR_FORCE_FLASH && (window["WebSocket"] !== undefined || window["MozWebSocket"] !== undefined)) {
+            if (window.TAMBUR_FORCE_FLASH) {
+                trigger_flash_socket_init(connection);
+                return;
+            }
+
+            if (window.TAMBUR_FORCE_COMET) {
+                window.WebSocket = tambur.Comet;
+            }
+
+            if (window["WebSocket"] !== undefined || window["MozWebSocket"] !== undefined) {
                 tambur.WebSocket = window["WebSocket"] || window["MozWebSocket"];
                 trigger_socket_init(connection);
             } else {
-                /*
-                 * at this moment we download the web_socket.js
-                 * flash fallback for browser who do not support
-                 * websockets out of the box. After the successful
-                 * download we will call Tambur.__init_ws from there
-                 * */
-                trigger_flash_socket_init(connection);
+                if (swfobject.hasFlashPlayerVersion("1")) {
+                    /*
+                     * at this moment we download the web_socket.js
+                     * flash fallback for browser who do not support
+                     * websockets out of the box. After the successful
+                     * download we will call Tambur.__init_ws from there
+                     * */
+                    trigger_flash_socket_init(connection);
+                } else {
+                    tambur.WebSocket = tambur.Comet;
+                    trigger_socket_init(connection);
+                }
             }
-        }
+        };
 
         if (window["JSON"] !== undefined) {
             init();
