@@ -4,7 +4,7 @@ Include the following script element on your website.
 ```html
 <script src="http://tamburio.github.com/tambur.js/out/tambur.min.js"></script>
 ```
-##1. Connection
+##Connection
 At first you must to get a new connection to our servers:
 ```javascript
 var conn = new tambur.Connection(MY_API_KEY, MY_APP_ID);
@@ -24,7 +24,7 @@ Behind the scene we will now check your browser for its HTML5 WebSocket support.
 
 Once your connection is ready you can start subscribing to any stream you like.
 
-##2. Streams
+##Streams
 Subscribing to a stream is as easy as
 
 ```javascript
@@ -141,7 +141,7 @@ stream.direct_msg("bob", "hi bob, how are you doing?");
 
 This call will always work, even if no user "bob" has subscribed. It probably make sense to use direct mode together with the presence mode.
 
-##3. Publisher
+##Publisher
 Since you don't want to use the tambur.js Publisher interface in production we don't bundle it together with the tambur.min.js or tambur.js. That's why you must add another script element to your website.
 ```html
 <script src="http://tamburio.github.com/tambur.js/out/tambur_pub.min.js"></script>
@@ -187,3 +187,21 @@ publisher.generate_presence_token("SOME_STREAM", "USER_NAME");
 ```javascript    
 publisher.generate_direct_token("SOME_STREAM", "USER_NAME");
 ```
+
+##License (MIT)
+Copyright (c) \<2012\> \<Tambur.io\>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+##License Dependencies
+web_socket.js : http://www.opensource.org/licenses/BSD-3-Clause
+
+swfobject.js : http://www.opensource.org/licenses/MIT
+
+sha1.js : http://www.opensource.org/licenses/BSD-2-Clause
+
+oauth.js : http://www.opensource.org/licenses/Apache-2.0
