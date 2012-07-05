@@ -121,7 +121,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     // Private methods
     function trigger_socket_init(connection) {
         var conn_id = connection_id += 1,
-            balancer_url = (connection.ssl === true ? "https://" : "http://") + tambur.balancer_host + "/" + connection.api_key + "/" + connection.app_id + "?instance=" + conn_id + "&callback=tambur.jsonp_connect_ws",
+            balancer_url = ((connection.ssl === true || 'https:' === document.location.protocol) ? "https://" : "http://") + tambur.balancer_host + "/" + connection.api_key + "/" + connection.app_id + "?instance=" + conn_id + "&callback=tambur.jsonp_connect_ws",
             script = document.createElement('script');
 
         connections[conn_id] = connection;
@@ -135,7 +135,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
 
     function trigger_flash_socket_init(connection) {
         window.WebSocket = undefined;
-        window.WEB_SOCKET_SWF_LOCATION = (connection.ssl === true ? "https://" : "http://") + tambur.static_url + "deps/WebSocketMainInsecure.swf";
+        window.WEB_SOCKET_SWF_LOCATION = ((connection.ssl === true || 'https:' === document.location.protocol) ? "https://" : "http://") + tambur.static_url + "deps/WebSocketMainInsecure.swf";
         tambur.utils.fetch_js("out/web_socket.min.js", function () {
             tambur.logger.debug("trigger_flash_socket_init returned, start with normal socket init");
             tambur.WebSocket = window["WebSocket"];
@@ -270,7 +270,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
         tambur.logger.debug("jsonp_connect_ws returned: " + connection_string);
         var connection = connections[conn_id];
 
-        connection.socket = new tambur.WebSocket((connection.ssl === true ? "wss://" : "ws://") + connection_string);
+        connection.socket = new tambur.WebSocket(((connection.ssl === true || 'https:' === document.location.protocol) ? "wss://" : "ws://") + connection_string);
         connection.socket.onopen = function () {
             tambur.logger.debug("socket[" + conn_id + "] onopen");
         };
