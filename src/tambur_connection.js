@@ -9,7 +9,7 @@
         connections = {};
 
     // Public properties
-    tambur.static_url = "tamburio.github.com/tambur.js/";
+    tambur.static_url = "static.tambur.io/";
     tambur.api_host = "api.tambur.io";
     tambur.balancer_host = "balancer.tambur.io";
     tambur.WebSocket = false;
@@ -31,8 +31,8 @@
 
     function trigger_flash_socket_init(connection) {
         window.WebSocket = undefined;
-        window.WEB_SOCKET_SWF_LOCATION = ((connection.ssl === true || 'https:' === document.location.protocol) ? "https://" : "http://") + tambur.static_url + "deps/WebSocketMainInsecure.swf";
-        tambur.utils.fetch_js("out/web_socket.min.js", function () {
+        window.WEB_SOCKET_SWF_LOCATION = ((connection.ssl === true || 'https:' === document.location.protocol) ? "https://" : "http://") + tambur.static_url + "WebSocketMainInsecure.swf";
+        tambur.utils.fetch_js("web_socket.min.js", function () {
             tambur.logger.debug("trigger_flash_socket_init returned, start with normal socket init");
             tambur.WebSocket = window["WebSocket"];
             trigger_socket_init(connection);
@@ -147,8 +147,10 @@
                      * */
                     trigger_flash_socket_init(connection);
                 } else {
-                    tambur.WebSocket = tambur.Comet;
-                    trigger_socket_init(connection);
+                    /* use window.TAMBUR_FORCE_COMET variable to enable our alpha-support for comet*/
+                    tambur.logger.error("We cannot fallback to flash, please install flash");
+                    // tambur.WebSocket = tambur.Comet;
+                    // trigger_socket_init(connection);
                 }
             }
         };
@@ -156,7 +158,7 @@
         if (window["JSON"] !== undefined) {
             init();
         } else {
-            tambur.utils.fetch_js("out/json2.min.js", init);
+            tambur.utils.fetch_js("json2.min.js", init);
         }
 
         return connection;
