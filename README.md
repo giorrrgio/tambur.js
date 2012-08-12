@@ -20,7 +20,7 @@ var conn = new tambur.Connection({
     max_retires : 10,         // nr of maximal re-connects (default 10)
 });
 ```
-Behind the scene we will now check your browser for its HTML5 WebSocket support. If WebSockets aren't supported we fallback to Flash sockets and automatically fetch the required Javascript resources as well as the swf-files. 
+Behind the scene we will now check your browser for its HTML5 WebSocket support. If WebSockets aren't supported we'll fallback to Flash sockets and automatically fetch the required Javascript resources as well as the swf-files. 
 
 Once your connection is ready you can start subscribing to any stream you like.
 
@@ -31,7 +31,7 @@ Subscribing to a stream is as easy as
 var stream = conn.get_stream("my_stream_name");
 ```
 
-If you are interested in when your stream is ready (usually within milliseconds) you can provide a ready callback:
+If you need to know when your stream is ready (usually within milliseconds) you can provide a ready callback:
 
 ```javascript
 stream.ready = function() {
@@ -39,7 +39,7 @@ stream.ready = function() {
 };
 ```
 
-However, that is most of the time not really necessary. It is more important that you can process the messages being published in your stream. It is as easy as:
+However, this won't be necessary most of the time. It is more important that you can process the messages being published in your stream. It is as easy as:
 
 ```javascript
 stream.onmessage = function(msg) {
