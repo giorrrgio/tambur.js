@@ -17,7 +17,7 @@ var conn = new tambur.Connection({
 
     ready : function () {},   // a callback that is fired when the connection is up
     ssl : true,               // enforcing ssl (default false)
-    max_retires : 10,         // nr of maximal re-connects (default 10)
+    max_retries : 10,         // nr of maximal re-connects (default 10)
 });
 ```
 Behind the scene we will now check your browser for its HTML5 WebSocket support. If WebSockets aren't supported we'll fallback to Flash sockets and automatically fetch the required Javascript resources as well as the swf-files. 
@@ -147,7 +147,7 @@ Since you don't want to use the tambur.js Publisher interface in production we d
 <script src="http://static.tambur.io/tambur_pub.min.js"></script>
 ```
 
-Using this Publish interface is only recommended for debugging and/or testing.
+Using this Publish interface is only recommended for debugging and/or testing. Normally, you'll want to use your own lib and programming language here. Look at our Python lib and examples for hints.
 ```javascript
 var conn = new tambur.Connection(MY_API_KEY, MY_APP_ID);
 var publisher = new tambur.Publisher(conn, MY_APP_SECRET);
