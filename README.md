@@ -2,7 +2,7 @@
 
 Include the following script element on your website.
 ```html
-<script src="http://tamburio.github.com/tambur.js/out/tambur.min.js"></script>
+<script src="http://static.tambur.io/tambur.min.js"></script>
 ```
 ##Connection
 At first you must to get a new connection to our servers:
@@ -39,7 +39,7 @@ stream.ready = function() {
 };
 ```
 
-However, this won't be necessary most of the time. It is more important that you can process the messages being published in your stream. It is as easy as:
+However, this won't be necessary most of the time. Your main job is to process the messages published in your stream. It is as easy as:
 
 ```javascript
 stream.onmessage = function(msg) {
@@ -61,7 +61,7 @@ stream.reopen();
 We always cache the stream, so a call to <code>conn.get_stream("MY_STREAM")</code> twice will return the same stream object, which might be open or closed. So if you are closing your stream with <code>stream.close()</code> and later want to open the same stream again you must do that with <code>stream.reopen()</code>, and not using <code>conn.get_stream("MY_STREAM")</code>. You can always check the boolean property <code>stream.active</code> for whether you must reopen the stream or not. 
 
 ###Modes
-Your streams can have none, one or several modes enabled. Such modes are <b>Authentication-Mode</b>, <b>Presence-Mode</b>, and <b>Direct-Mode</b>. In order to enable such a mode your browser client must ask the web application for permission. The permission is just a token specific to the stream, mode, and your unique subscriber id. The server libraries we provide do usually contain the necessary functions for generating these tokens. 
+Your streams can have none, one or several modes enabled. A mode can be an <b>Authentication-Mode</b>, a <b>Presence-Mode</b>, or a <b>Direct-Mode</b>. In order to enable a mode your browser client must ask the web application for permission. The permission is just a token specific to the stream, mode, and your unique subscriber id. The server libraries we provide do usually contain the necessary functions for generating these tokens. 
 
 ####Authentication Mode
 The Authentication Mode allows a publisher to send specific messages to all the subscribers of a stream that have been previously authenticated by your web application.
