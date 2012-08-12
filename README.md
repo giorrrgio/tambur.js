@@ -84,7 +84,7 @@ stream.onauth = function(msg) {
 ```
 
 ####Presence Mode
-The Presence Mode will allow you to get informed about other subscribers joining and leaving the stream. You will only get informed about subscribers also having the presence mode enabled.
+The Presence Mode will allow you to get information about other subscribers joining and leaving the stream, but only if those have enabled the presence mode too.
 In order to enable this mode you must select a user_name which will be sent together with your presence status to all the other subscribers.
 
 ```javascript    
@@ -144,7 +144,7 @@ This call will always work, even if no user "bob" has subscribed. It probably ma
 ##Publisher
 Since you don't want to use the tambur.js Publisher interface in production we don't bundle it together with the tambur.min.js or tambur.js. That's why you must add another script element to your website.
 ```html
-<script src="http://tamburio.github.com/tambur.js/out/tambur_pub.min.js"></script>
+<script src="http://static.tambur.io/tambur_pub.min.js"></script>
 ```
 
 Using this Publish interface is only recommended for debugging and/or testing.
@@ -168,7 +168,7 @@ publisher.publish("SOME_STREAM", "SOME MESSAGE", true);
 this will show you the debug output of the validation process within the Tambur.io Web Application.
 
 ###Generate Mode Tokens
-A mode token is a SHA1 hash over a string containing Api-Key, App-Id, Mode, SubscriberId, and some Mode specific parameters. Since the Publisher Instance contains a reference to the connection it already knows Api-Key, App-Id and the SubscriberId for this particular connection. So for now you can only generate mode tokens for your own connection. (probably if you are using this <b>unrecommended</b> Publisher interface you also know how to tweak it in order to support other SubscriberIds.
+A mode token is a SHA1 hash over a string containing Api-Key, App-Id, Mode, SubscriberId, and some Mode specific parameters. Since the Publisher Instance contains a reference to the connection it already knows the Api-Key, App-Id and the SubscriberId for this particular connection. So for now you can only generate mode tokens for your own connection. (If you are using this <b>unrecommended</b> Publisher interface you'll probably know how to tweak it in order to support other SubscriberIds.
 
 ####Auth Mode
 
