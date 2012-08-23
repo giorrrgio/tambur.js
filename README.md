@@ -188,6 +188,48 @@ publisher.generate_presence_token("SOME_STREAM", "USER_NAME");
 publisher.generate_direct_token("SOME_STREAM", "USER_NAME");
 ```
 
+####Quickstart
+Look at the simple example below for a starting point. Just copy this into a file and run it in a browser, providing your own
+Apikey and AppId.
+
+````html
+<html>
+    <head>
+      <script src='http://static.tambur.io/tambur.min.js'></script>
+      <script type="text/javascript">
+    function status(text){
+	var date = new Date();
+	document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + date + ": " + text + "<br>";
+	}
+	var conn;
+	function connect(){
+	conn = new tambur.Connection({
+        api_key : "your_api_key",
+        app_id : "some_app_id",
+	ready : function() {status("tambur websocket ready")}});
+	status("trying to open a tambur websocket")}
+	
+	function subscribe(strm){
+	var stream = conn.get_stream(strm);
+	stream.ready = function () {
+	status("Subscribed to stream:" + strm)};
+	stream.onmessage = function(msg) 
+	{
+	status("Tambur sent the following message:" + msg );
+	}}
+      </script>
+    </head>
+    <body>
+      <h2>1) Create a Tambur websocket and connect to it</h2>
+      <input type="submit" value="connect" onclick="connect(); return false;" />
+      <h2>2) Subscribe to a stream</h2>
+      <input type="text" id="stream" name="stream" />
+      <input type="button" value="subscribe" onclick="subscribe(document.getElementById('stream').value); return false;" />
+      <h2>3) Push some data (from a publish lib or your console on tambur.io) into that stream</h2>
+      <div id='status'></div>
+    </body>
+</html>
+```
 ##License (MIT)
 Copyright (c) \<2012\> \<Tambur.io\>
 
