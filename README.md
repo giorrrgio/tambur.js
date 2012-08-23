@@ -188,7 +188,7 @@ publisher.generate_presence_token("SOME_STREAM", "USER_NAME");
 publisher.generate_direct_token("SOME_STREAM", "USER_NAME");
 ```
 
-####Quickstart
+##Quickstart
 Look at the simple example below for a starting point. Just copy this into a file and run it in a browser, providing your own
 Apikey and AppId.
 
