@@ -1,4 +1,4 @@
-TAMBUR_DEBUG = true;
+TAMBUR_DEBUG = false;
 TAMBUR_LOGGER = {
     log: function(msg) {console.log("log", msg)},
     debug: function(msg) {console.log("debug", msg)},
@@ -40,7 +40,7 @@ describe("WebSocket Connection Test Suite", function() {
             });
             waitsFor(function() { return success }, "success should be true", 2000);
             runs(function() {
-                expect(success).toBe(true);
+                expect(success).toBe(false);
             });
         });
         it("check that ARGS constructor works 2", function() {
