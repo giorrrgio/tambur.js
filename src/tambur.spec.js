@@ -40,7 +40,7 @@ describe("WebSocket Connection Test Suite", function() {
             });
             waitsFor(function() { return success }, "success should be true", 2000);
             runs(function() {
-                expect(success).toBe(false);
+                expect(success).toBe(true);
             });
         });
         it("check that ARGS constructor works 2", function() {
