@@ -2,11 +2,15 @@
 import logging
 from webassets import Environment, Bundle
 from webassets.script import CommandLineEnvironment
+from subprocess import call
 
 def main():
     log = logging.getLogger('webassets')
     log.addHandler(logging.StreamHandler())
     log.setLevel(logging.DEBUG)
+
+    call(["coffee", "-c", "src/tambur.coffee"])
+    call(["coffee", "-c", "src/tambur_publisher.coffee"])
 
     env = Environment('.', '/static')
     jsonjs = Bundle(
@@ -15,18 +19,10 @@ def main():
             'deps/web_socket.js', filters='yui_js', output='out/web_socket.min.js')
     tamburjs = Bundle(
             'deps/swfobject.js',
-            'src/tambur_comet_fallback.js',
-            'src/tambur_connection.js',
-            'src/tambur_logger.js',
-            'src/tambur_utils.js',
-            'src/tambur_stream.js', output='out/tambur.js')
+            'src/tambur.js', output='out/tambur.js')
     tamburminjs = Bundle(
             'deps/swfobject.js',
-            'src/tambur_comet_fallback.js',
-            'src/tambur_connection.js',
-            'src/tambur_logger.js',
-            'src/tambur_utils.js',
-            'src/tambur_stream.js', filters='yui_js', output='out/tambur.min.js')
+            'src/tambur.js', filters='yui_js', output='out/tambur.min.js')
     publishjs = Bundle(
             'deps/sha1.js',
             'deps/oauth.js',
