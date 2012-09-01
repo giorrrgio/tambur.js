@@ -1,4 +1,4 @@
-TAMBUR_DEBUG = false;
+TAMBUR_DEBUG = true;
 TAMBUR_LOGGER = {
     log: function(msg) {console.log("log", msg)},
     debug: function(msg) {console.log("debug", msg)},
