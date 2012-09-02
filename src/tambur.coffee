@@ -207,6 +207,7 @@ class CometSocket
 window.onbeforeunload = ->
     for socket in tambur.Comet.instances
         socket.send("fin")
+    return
 
 class Stream
     constructor: (@connection, @stream) ->
