@@ -146,13 +146,14 @@ class FlashSocketConnection extends AbstractConnection
                 max_retries : args[5],
                 no_auto_connect : true # important we will reconnect after fetching flash resources
             }
-            conn = super(undefined, args)
+            @conn = super(undefined, args)
             window.WEB_SOCKET_SWF_LOCATION = "#{ Utils.proto() }#{ static_url }WebSocketMainInsecure.swf"
             Utils.fetch_js("web_socket.min.js", =>
                 tambur.Logger.debug("trigger_flash_socket_init returned, start with normal socket init")
-                conn.socket_impl = WebSocket
-                conn.reopen()
+                @conn.socket_impl = WebSocket
+                @conn.reopen()
             )
+            @conn
         else
             tambur.Logger.error("we cannot fallback to flash, please install flash")
 
