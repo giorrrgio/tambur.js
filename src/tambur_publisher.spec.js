@@ -58,9 +58,9 @@ describe("Publisher Publish Test Suite", function() {
                     }
                     success = true;
                 });
-            }, 1000);
+            }, 2000);
         });
-        waitsFor(function() { return success }, "success should be true", 2000);
+        waitsFor(function() { return success }, "success should be true", 4000);
         return true;
     }
     it("check publish", function() {
