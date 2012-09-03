@@ -33,9 +33,9 @@ class AbstractConnection
             @max_retries = args[5] ? 10
 
         if not @no_auto_connect
-            @init_connect()
+            init_connect.call(this)
 
-    init_connect: ->
+    init_connect = ->
         Utils.jsonp("#{ Utils.proto(@ssl) }//#{ balancer_host }/#{ @api_key }/#{ @app_id }?instance=#{ @id }&callback=tambur.Utils.connect_callback")        
     
     close: ->
@@ -44,7 +44,7 @@ class AbstractConnection
     
     reopen: ->
         @reconnecting = true
-        @init_connect()
+        init_connect.call(this)
     
     get_stream: (name) ->
         if @streams[name]
@@ -120,7 +120,7 @@ class AbstractConnection
                 if @retry < @max_retries
                     setTimeout( =>
                         tambur.Logger.debug("reconnect")
-                        @init_connect()
+                        init_connect.call(this)
                     , 1000)
                     retries += 1
 
@@ -137,11 +137,20 @@ class WebSocketConnection extends AbstractConnection
 class FlashSocketConnection extends AbstractConnection
     constructor: (args...) ->
         if swfobject.hasFlashPlayerVersion("1")
-            window.WebSocket = undefined
+            args = {
+                api_key : args[0],
+                app_id : args[1],
+                ssl : args[2],
+                ready : args[3],
+                onclose : args[4],
+                max_retries : args[5],
+                no_auto_connect : true # important we will reconnect after fetching flash resources
+            }
+            conn = super(WebSocket, args)
             window.WEB_SOCKET_SWF_LOCATION = "#{ Utils.proto() }#{ static_url }WebSocketMainInsecure.swf"
             Utils.fetch_js("web_socket.min.js", =>
                 tambur.Logger.debug("trigger_flash_socket_init returned, start with normal socket init")
-                super(WebSocket, args...)
+                conn.reopen()
             )
         else
             tambur.Logger.error("we cannot fallback to flash, please install flash")
