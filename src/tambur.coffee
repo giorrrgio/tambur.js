@@ -32,7 +32,7 @@ class AbstractConnection
             @onclose = args[4] ? ->
             @max_retries = args[5] ? 10
 
-        if not @no_auto_connect
+        if not @no_auto_connect and @socket_impl
             init_connect.call(this)
 
     init_connect = ->
@@ -137,16 +137,7 @@ class WebSocketConnection extends AbstractConnection
 class FlashSocketConnection extends AbstractConnection
     constructor: (args...) ->
         if swfobject.hasFlashPlayerVersion("1")
-            args = {
-                api_key : args[0],
-                app_id : args[1],
-                ssl : args[2],
-                ready : args[3],
-                onclose : args[4],
-                max_retries : args[5],
-                no_auto_connect : true # important we will reconnect after fetching flash resources
-            }
-            @conn = super(undefined, args)
+            @conn = super(undefined, args...) #passing undefined won't trigger init_connect
             window.WEB_SOCKET_SWF_LOCATION = "#{ Utils.proto() }#{ static_url }WebSocketMainInsecure.swf"
             Utils.fetch_js("web_socket.min.js", => flash_init.call(this))
             this
