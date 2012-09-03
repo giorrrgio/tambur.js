@@ -152,7 +152,7 @@ class FlashSocketConnection extends AbstractConnection
             this
         else
             tambur.Logger.error("we cannot fallback to flash, please install flash")
-    flash_init: ->
+    flash_init = ->
         tambur.Logger.debug("trigger_flash_socket_init returned, start with normal socket init")
         this.socket_impl = WebSocket
         this.reopen()
