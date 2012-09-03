@@ -36,7 +36,7 @@ class AbstractConnection
             init_connect.call(this)
 
     init_connect = ->
-        Utils.jsonp("#{ Utils.proto(@ssl) }//#{ balancer_host }/#{ @api_key }/#{ @app_id }?instance=#{ @id }&callback=tambur.Utils.connect_callback")        
+        Utils.jsonp("#{ Utils.proto(@ssl) }//#{ balancer_host }/#{ @api_key }/#{ @app_id }?instance=#{ @id }&callback=tambur.Utils.connect_callback")
     
     close: ->
         @closed_normaly = true
@@ -148,14 +148,15 @@ class FlashSocketConnection extends AbstractConnection
             }
             @conn = super(undefined, args)
             window.WEB_SOCKET_SWF_LOCATION = "#{ Utils.proto() }#{ static_url }WebSocketMainInsecure.swf"
-            Utils.fetch_js("web_socket.min.js", =>
-                tambur.Logger.debug("trigger_flash_socket_init returned, start with normal socket init")
-                @conn.socket_impl = WebSocket
-                @conn.reopen()
-            )
+            Utils.fetch_js("web_socket.min.js", => flash_init.call(this))
             @conn
         else
             tambur.Logger.error("we cannot fallback to flash, please install flash")
+    flash_init = ->
+        tambur.Logger.debug("trigger_flash_socket_init returned, start with normal socket init")
+        @conn.socket_impl = WebSocket
+        @conn.reopen()
+
 
 class CometSocketConnection extends AbstractConnection
     constructor: (args...) ->
